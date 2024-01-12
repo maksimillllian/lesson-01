@@ -166,6 +166,7 @@ app.put('/videos/:id',(req: RequestWithParams<Param> & RequestWithBody<UpdateVid
 
     res.status(204).send(updatedVideo);
 })
+
 app.post('/videos', (req: RequestWithBody<CreateVideoType>, res: Response) => {
     const errors: ErrorType = {
         errorsMessages: [],
