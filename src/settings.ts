@@ -137,9 +137,7 @@ app.put('/videos/:id',(req: RequestWithParams<Param> & RequestWithBody<UpdateVid
             }
         });
     }
-    if (typeof canBeDownloaded !== 'boolean') {
-        canBeDownloaded = false;
-    }
+
     if (minAgeRestriction !== null && minAgeRestriction !== undefined) {
         if (!Number.isInteger(minAgeRestriction) || minAgeRestriction < 1 || minAgeRestriction > 18) {
             errors.errorsMessages.push({ message: 'Incorrect minAgeRestriction!', field: 'minAgeRestriction' });
