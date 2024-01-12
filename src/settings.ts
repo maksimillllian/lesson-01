@@ -137,10 +137,15 @@ app.put('/videos/:id',(req: RequestWithParams<Param> & RequestWithBody<UpdateVid
             }
         });
     }
-    if (!minAgeRestriction || typeof +minAgeRestriction !== 'number' || minAgeRestriction < 1 || minAgeRestriction > 18) {
-        minAgeRestriction = null;
-        // errors.errorsMessages.push({ message: 'Incorrect minAgeRestriction', field: ' minAgeRestriction' });
+    if (typeof canBeDownloaded !== 'boolean') {
+        canBeDownloaded = false;
     }
+    if (minAgeRestriction !== null && minAgeRestriction !== undefined) {
+        if (!Number.isInteger(minAgeRestriction) || minAgeRestriction < 1 || minAgeRestriction > 18) {
+            errors.errorsMessages.push({ message: 'Incorrect minAgeRestriction!', field: 'minAgeRestriction' });
+        }
+    }
+
     if (errors.errorsMessages.length) {
         res.status(400).send(errors);
         return;
@@ -179,10 +184,15 @@ app.post('/videos', (req: RequestWithBody<CreateVideoType>, res: Response) => {
             }
         });
     }
-    if (!minAgeRestriction || typeof +minAgeRestriction !== 'number' || minAgeRestriction < 1 || minAgeRestriction > 18) {
-        minAgeRestriction = null;
-        // errors.errorsMessages.push({ message: 'Incorrect minAgeRestriction', field: ' minAgeRestriction' });
+    if (typeof canBeDownloaded !== 'boolean') {
+        canBeDownloaded = false;
     }
+    if (minAgeRestriction !== null && minAgeRestriction !== undefined) {
+        if (!Number.isInteger(minAgeRestriction) || minAgeRestriction < 1 || minAgeRestriction > 18) {
+            errors.errorsMessages.push({ message: 'Incorrect minAgeRestriction!', field: 'minAgeRestriction' });
+        }
+    }
+
     if (errors.errorsMessages.length) {
         res.status(400).send(errors);
         return;
