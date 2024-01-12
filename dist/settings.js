@@ -89,6 +89,10 @@ exports.app.put('/videos/:id', (req, res) => {
             }
         });
     }
+    if (!minAgeRestriction || typeof +minAgeRestriction !== 'number' || minAgeRestriction < 1 || minAgeRestriction > 18) {
+        minAgeRestriction = null;
+        // errors.errorsMessages.push({ message: 'Incorrect minAgeRestriction', field: ' minAgeRestriction' });
+    }
     if (errors.errorsMessages.length) {
         res.status(400).send(errors);
         return;
@@ -126,6 +130,10 @@ exports.app.post('/videos', (req, res) => {
                 errors.errorsMessages.push({ message: 'Incorrect availableResolution!', field: 'availableResolution' });
             }
         });
+    }
+    if (!minAgeRestriction || typeof +minAgeRestriction !== 'number' || minAgeRestriction < 1 || minAgeRestriction > 18) {
+        minAgeRestriction = null;
+        // errors.errorsMessages.push({ message: 'Incorrect minAgeRestriction', field: ' minAgeRestriction' });
     }
     if (errors.errorsMessages.length) {
         res.status(400).send(errors);
