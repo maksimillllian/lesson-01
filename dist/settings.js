@@ -89,13 +89,13 @@ exports.app.put('/videos/:id', (req, res) => {
             }
         });
     }
-    if (typeof canBeDownloaded !== 'boolean') {
-        canBeDownloaded = false;
-    }
     if (minAgeRestriction !== null && minAgeRestriction !== undefined) {
         if (!Number.isInteger(minAgeRestriction) || minAgeRestriction < 1 || minAgeRestriction > 18) {
             errors.errorsMessages.push({ message: 'Incorrect minAgeRestriction!', field: 'minAgeRestriction' });
         }
+    }
+    if (canBeDownloaded === undefined) {
+        canBeDownloaded = false;
     }
     if (typeof canBeDownloaded !== 'boolean') {
         errors.errorsMessages.push({ message: 'Incorrect canBeDownloaded!', field: 'canBeDownloaded' });

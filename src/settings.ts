@@ -143,6 +143,9 @@ app.put('/videos/:id',(req: RequestWithParams<Param> & RequestWithBody<UpdateVid
             errors.errorsMessages.push({ message: 'Incorrect minAgeRestriction!', field: 'minAgeRestriction' });
         }
     }
+    if(canBeDownloaded === undefined){
+        canBeDownloaded = false;
+    }
     if (typeof canBeDownloaded !== 'boolean') {
         errors.errorsMessages.push({ message: 'Incorrect canBeDownloaded!', field: 'canBeDownloaded' });
     }
