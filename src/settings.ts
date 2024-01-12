@@ -149,16 +149,20 @@ app.put('/videos/:id',(req: RequestWithParams<Param> & RequestWithBody<UpdateVid
     if (canBeDownloaded !== true && canBeDownloaded !== false) {
         errors.errorsMessages.push({ message: 'Incorrect canBeDownloaded!', field: 'canBeDownloaded' });
     }
+    if (typeof publicationDate === 'number' || typeof publicationDate !== "string" || !publicationDate.trim()){
+        errors.errorsMessages.push({ message: 'Incorrect publicationDate!', field: 'publicationDate' });
+    }
     if (errors.errorsMessages.length) {
         res.status(400).send(errors);
         return;
     }
+
     const updatedVideo: VideoType = {
         id,
         canBeDownloaded: req.body.canBeDownloaded || false,
         minAgeRestriction: req.body.minAgeRestriction || videos[indexOfVideo].minAgeRestriction,
         createdAt: videos[indexOfVideo].createdAt,
-        publicationDate: req.body.publicationDate || videos[indexOfVideo].publicationDate,
+        publicationDate: publicationDate || videos[indexOfVideo].publicationDate,
         title: req.body.title,
         author: req.body.author,
         availableResolutions,
