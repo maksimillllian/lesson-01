@@ -225,6 +225,7 @@ app.delete('/testing/all-data', (req: RequestWithBody<CreateVideoType>, res: Res
     videos.length = 0;
     res.sendStatus(204);
 });
+
 app.delete('/videos/:id', (req: RequestWithParams<Param>, res: Response) => {
     const id = +req.params.id
     const indexOfVideoForDeleting = videos.findIndex((v) => v.id === id)
