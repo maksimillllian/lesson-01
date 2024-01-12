@@ -97,7 +97,7 @@ exports.app.put('/videos/:id', (req, res) => {
     if (canBeDownloaded === undefined) {
         canBeDownloaded = false;
     }
-    if (typeof canBeDownloaded !== 'boolean') {
+    if (canBeDownloaded !== true && canBeDownloaded !== false) {
         errors.errorsMessages.push({ message: 'Incorrect canBeDownloaded!', field: 'canBeDownloaded' });
     }
     if (errors.errorsMessages.length) {
@@ -141,7 +141,7 @@ exports.app.post('/videos', (req, res) => {
     if (canBeDownloaded === undefined) {
         canBeDownloaded = false;
     }
-    if (typeof canBeDownloaded !== 'boolean') {
+    if (canBeDownloaded !== true && canBeDownloaded !== false) {
         errors.errorsMessages.push({ message: 'Incorrect canBeDownloaded!', field: 'canBeDownloaded' });
     }
     if (minAgeRestriction !== null && minAgeRestriction !== undefined) {
