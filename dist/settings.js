@@ -93,7 +93,7 @@ exports.app.put('/videos/:id', (req, res) => {
         res.status(400).send(errors);
         return;
     }
-    const updateVideo = {
+    const updatedVideo = {
         id,
         canBeDownloaded: req.body.canBeDownloaded || false,
         minAgeRestriction: req.body.minAgeRestriction || videos[indexOfVideo].minAgeRestriction,
@@ -103,8 +103,8 @@ exports.app.put('/videos/:id', (req, res) => {
         author: req.body.author,
         availableResolutions,
     };
-    videos[indexOfVideo] = updateVideo;
-    res.status(200).send(updateVideo);
+    videos[indexOfVideo] = updatedVideo;
+    res.status(200).send(updatedVideo);
 });
 exports.app.post('/videos', (req, res) => {
     const errors = {

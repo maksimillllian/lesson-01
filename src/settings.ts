@@ -141,7 +141,7 @@ app.put('/videos/:id',(req: RequestWithParams<Param> & RequestWithBody<UpdateVid
         res.status(400).send(errors);
         return;
     }
-    const updateVideo: VideoType = {
+    const updatedVideo: VideoType = {
         id,
         canBeDownloaded: req.body.canBeDownloaded || false,
         minAgeRestriction: req.body.minAgeRestriction || videos[indexOfVideo].minAgeRestriction,
@@ -151,9 +151,9 @@ app.put('/videos/:id',(req: RequestWithParams<Param> & RequestWithBody<UpdateVid
         author: req.body.author,
         availableResolutions,
     }
-    videos[indexOfVideo] = updateVideo;
+    videos[indexOfVideo] = updatedVideo;
 
-    res.status(200).send(updateVideo);
+    res.status(200).send(updatedVideo);
 })
 app.post('/videos', (req: RequestWithBody<CreateVideoType>, res: Response) => {
     const errors: ErrorType = {
