@@ -68,14 +68,21 @@ type Param = {
     id: number;
 };
 
-type RequestWithBody<B> = Request<unknown, unknown, B, unknown>;
+type RequestWithBody<Body> = Request<unknown, unknown, Body, unknown>;
 
 type CreateVideoType = {
     title: string;
     author: string;
     availableResolutions: typeof availableResolution;
 };
-
+type UpdateVideoType = {
+    title?: string;
+    author?: string;
+    availableResolutions?: string[];
+    canBeDownloaded?: boolean;
+    minAgeRestriction?: number;
+    publicationDate?: string;
+};
 type ErrorMessageType = {
     field: string;
     message: string;
@@ -89,7 +96,7 @@ app.get('/videos', (req: Request, res: Response) => {
     res.send(videos);
 });
 
-app.get('/videos/:id', (req: RequestWithParams<Param>, res: Response) => {
+app.get('/videos/:id', (req: Request<Param, unknown, Body, unknown>, res: Response) => {
     const id = +req.params.id;
 
     const video = videos.find((v) => v.id === id);
@@ -101,6 +108,50 @@ app.get('/videos/:id', (req: RequestWithParams<Param>, res: Response) => {
     res.send(video);
 });
 
+app.put('/videos/:id',(req: RequestWithParams<Param> & RequestWithBody<UpdateVideoType> , res: Response) => {
+    const id = +req.params.id;
+    const indexOfVideo = videos.findIndex((p) => p.id === id);
+    if(indexOfVideo === -1){
+        res.sendStatus(404);
+        return;
+    }
+    const errors: ErrorType = {
+        errorsMessages: [],
+    };
+    let { title, author, availableResolutions, canBeDownloaded, minAgeRestriction, publicationDate } = req.body;
+    if (!title || typeof title !== 'string' || !title.trim() || title.trim().length > 40) {
+        errors.errorsMessages.push({ message: 'Incorrect title!', field: 'title' });
+    }
+    if (!author || typeof author !== 'string' || !author.trim() || author.trim().length > 20) {
+        errors.errorsMessages.push({ message: 'Incorrect author!', field: 'author' });
+    }
+    if (!Array.isArray(availableResolutions)) {
+        availableResolutions = [];
+    } else {
+        availableResolutions.forEach((r) => {
+            if (!availableResolution.includes(r)) {
+                errors.errorsMessages.push({ message: 'Incorrect availableResolution!', field: 'availableResolution' });
+            }
+        });
+    }
+    if (errors.errorsMessages.length) {
+        res.status(400).send(errors);
+        return;
+    }
+    const updateVideo: VideoType = {
+        id : videos[indexOfVideo].id,
+        canBeDownloaded: req.body.canBeDownloaded || false,
+        minAgeRestriction: req.body.minAgeRestriction || videos[indexOfVideo].minAgeRestriction,
+        createdAt: videos[indexOfVideo].createdAt,
+        publicationDate: req.body.publicationDate || videos[indexOfVideo].publicationDate,
+        title: req.body.title || videos[indexOfVideo].title,
+        author: req.body.author || videos[indexOfVideo].author,
+        availableResolutions,
+    }
+    videos[indexOfVideo] = updateVideo;
+
+    res.status(200).send(updateVideo);
+})
 app.post('/videos', (req: RequestWithBody<any>, res: Response) => {
     const errors: ErrorType = {
         errorsMessages: [],
@@ -149,4 +200,15 @@ app.post('/videos', (req: RequestWithBody<any>, res: Response) => {
 app.delete('/testing/all-data', (req: RequestWithBody<CreateVideoType>, res: Response) => {
     videos.length = 0;
     res.sendStatus(204);
+});
+app.delete('/videos/:id', (req: RequestWithParams<Param>, res: Response) => {
+    const id = +req.params.id
+    const indexOfVideoForDeleting = videos.findIndex((v) => v.id === id)
+    if(indexOfVideoForDeleting !== -1){
+        videos.splice(indexOfVideoForDeleting, 1)
+        res.sendStatus(204);
+    }else{
+        res.sendStatus(404);
+    }
+
 });

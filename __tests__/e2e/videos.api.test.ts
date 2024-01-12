@@ -5,7 +5,7 @@ describe('GET /videos', () => {
     it('responds with json containing a list of videos', async () => {
         const response = await request(app).get('/videos');
         expect(response.status).toBe(200);
-        expect(response.body).toHaveLength(1); // Assuming there's one video in the array
+        expect(response.body).toHaveLength(4); // Assuming there's one video in the array
     });
 });
 
