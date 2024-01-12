@@ -188,6 +188,9 @@ app.post('/videos', (req: RequestWithBody<CreateVideoType>, res: Response) => {
             }
         });
     }
+    if(canBeDownloaded === undefined){
+        canBeDownloaded = false;
+    }
     if (typeof canBeDownloaded !== 'boolean') {
         errors.errorsMessages.push({ message: 'Incorrect canBeDownloaded!', field: 'canBeDownloaded' });
     }

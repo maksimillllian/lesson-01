@@ -138,6 +138,9 @@ exports.app.post('/videos', (req, res) => {
             }
         });
     }
+    if (canBeDownloaded === undefined) {
+        canBeDownloaded = false;
+    }
     if (typeof canBeDownloaded !== 'boolean') {
         errors.errorsMessages.push({ message: 'Incorrect canBeDownloaded!', field: 'canBeDownloaded' });
     }
