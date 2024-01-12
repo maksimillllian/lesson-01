@@ -187,7 +187,7 @@ app.post('/videos', (req: RequestWithBody<CreateVideoType>, res: Response) => {
 
     const newVideo: VideoType = {
         id: +(new Date()),
-        canBeDownloaded: false,
+        canBeDownloaded: req.body.canBeDownloaded || false,
         minAgeRestriction: req.body.minAgeRestriction || null,
         createdAt: createdAt.toISOString(),
         publicationDate: publicationDate.toISOString(),

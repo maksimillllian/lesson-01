@@ -136,7 +136,7 @@ exports.app.post('/videos', (req, res) => {
     publicationDate.setDate(createdAt.getDate() + 1);
     const newVideo = {
         id: +(new Date()),
-        canBeDownloaded: false,
+        canBeDownloaded: req.body.canBeDownloaded || false,
         minAgeRestriction: req.body.minAgeRestriction || null,
         createdAt: createdAt.toISOString(),
         publicationDate: publicationDate.toISOString(),
