@@ -148,7 +148,6 @@ app.put('/videos/:id',(req: RequestWithParams<Param> & RequestWithBody<UpdateVid
     if (typeof canBeDownloaded !== 'boolean') {
         errors.errorsMessages.push({ message: 'Incorrect canBeDownloaded!', field: 'canBeDownloaded' });
     }
-
     if (errors.errorsMessages.length) {
         res.status(400).send(errors);
         return;
