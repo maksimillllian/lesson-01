@@ -85,7 +85,7 @@ exports.app.put('/videos/:id', (req, res) => {
     else {
         availableResolutions.forEach((r) => {
             if (!availableResolution.includes(r)) {
-                errors.errorsMessages.push({ message: 'Incorrect availableResolution!', field: 'availableResolution' });
+                errors.errorsMessages.push({ message: 'Incorrect availableResolution!', field: 'availableResolutions' });
             }
         });
     }
@@ -96,6 +96,9 @@ exports.app.put('/videos/:id', (req, res) => {
         if (!Number.isInteger(minAgeRestriction) || minAgeRestriction < 1 || minAgeRestriction > 18) {
             errors.errorsMessages.push({ message: 'Incorrect minAgeRestriction!', field: 'minAgeRestriction' });
         }
+    }
+    if (typeof canBeDownloaded !== 'boolean') {
+        errors.errorsMessages.push({ message: 'Incorrect canBeDownloaded!', field: 'canBeDownloaded' });
     }
     if (errors.errorsMessages.length) {
         res.status(400).send(errors);
@@ -112,7 +115,7 @@ exports.app.put('/videos/:id', (req, res) => {
         availableResolutions,
     };
     videos[indexOfVideo] = updatedVideo;
-    res.status(200).send(updatedVideo);
+    res.status(204).send(updatedVideo);
 });
 exports.app.post('/videos', (req, res) => {
     const errors = {
@@ -131,12 +134,12 @@ exports.app.post('/videos', (req, res) => {
     else {
         availableResolutions.forEach((r) => {
             if (!availableResolution.includes(r)) {
-                errors.errorsMessages.push({ message: 'Incorrect availableResolution!', field: 'availableResolution' });
+                errors.errorsMessages.push({ message: 'Incorrect availableResolution!', field: 'availableResolutions' });
             }
         });
     }
     if (typeof canBeDownloaded !== 'boolean') {
-        canBeDownloaded = false;
+        errors.errorsMessages.push({ message: 'Incorrect canBeDownloaded!', field: 'canBeDownloaded' });
     }
     if (minAgeRestriction !== null && minAgeRestriction !== undefined) {
         if (!Number.isInteger(minAgeRestriction) || minAgeRestriction < 1 || minAgeRestriction > 18) {

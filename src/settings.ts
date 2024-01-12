@@ -133,7 +133,7 @@ app.put('/videos/:id',(req: RequestWithParams<Param> & RequestWithBody<UpdateVid
     } else {
         availableResolutions.forEach((r) => {
             if (!availableResolution.includes(r)) {
-                errors.errorsMessages.push({ message: 'Incorrect availableResolution!', field: 'availableResolution' });
+                errors.errorsMessages.push({ message: 'Incorrect availableResolution!', field: 'availableResolutions' });
             }
         });
     }
@@ -144,6 +144,9 @@ app.put('/videos/:id',(req: RequestWithParams<Param> & RequestWithBody<UpdateVid
         if (!Number.isInteger(minAgeRestriction) || minAgeRestriction < 1 || minAgeRestriction > 18) {
             errors.errorsMessages.push({ message: 'Incorrect minAgeRestriction!', field: 'minAgeRestriction' });
         }
+    }
+    if (typeof canBeDownloaded !== 'boolean') {
+        errors.errorsMessages.push({ message: 'Incorrect canBeDownloaded!', field: 'canBeDownloaded' });
     }
 
     if (errors.errorsMessages.length) {
@@ -162,7 +165,7 @@ app.put('/videos/:id',(req: RequestWithParams<Param> & RequestWithBody<UpdateVid
     }
     videos[indexOfVideo] = updatedVideo;
 
-    res.status(200).send(updatedVideo);
+    res.status(204).send(updatedVideo);
 })
 app.post('/videos', (req: RequestWithBody<CreateVideoType>, res: Response) => {
     const errors: ErrorType = {
@@ -180,12 +183,12 @@ app.post('/videos', (req: RequestWithBody<CreateVideoType>, res: Response) => {
     } else {
         availableResolutions.forEach((r) => {
             if (!availableResolution.includes(r)) {
-                errors.errorsMessages.push({ message: 'Incorrect availableResolution!', field: 'availableResolution' });
+                errors.errorsMessages.push({ message: 'Incorrect availableResolution!', field: 'availableResolutions' });
             }
         });
     }
     if (typeof canBeDownloaded !== 'boolean') {
-        canBeDownloaded = false;
+        errors.errorsMessages.push({ message: 'Incorrect canBeDownloaded!', field: 'canBeDownloaded' });
     }
     if (minAgeRestriction !== null && minAgeRestriction !== undefined) {
         if (!Number.isInteger(minAgeRestriction) || minAgeRestriction < 1 || minAgeRestriction > 18) {
