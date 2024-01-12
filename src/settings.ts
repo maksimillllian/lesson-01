@@ -73,7 +73,7 @@ type RequestWithBody<Body> = Request<unknown, unknown, Body, unknown>;
 type CreateVideoType = {
     title: string;
     author: string;
-    availableResolutions?: typeof availableResolution;
+    availableResolutions: typeof availableResolution;
     canBeDownloaded?: boolean;
     minAgeRestriction?: number | null;
     publicationDate?: string;
@@ -81,7 +81,7 @@ type CreateVideoType = {
 type UpdateVideoType = {
     title: string;
     author: string;
-    availableResolutions?: typeof availableResolution;
+    availableResolutions: typeof availableResolution;
     canBeDownloaded?: boolean;
     minAgeRestriction?: number | null;
     publicationDate?: string;
