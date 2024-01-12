@@ -94,13 +94,13 @@ exports.app.put('/videos/:id', (req, res) => {
         return;
     }
     const updateVideo = {
-        id: videos[indexOfVideo].id,
+        id,
         canBeDownloaded: req.body.canBeDownloaded || false,
         minAgeRestriction: req.body.minAgeRestriction || videos[indexOfVideo].minAgeRestriction,
         createdAt: videos[indexOfVideo].createdAt,
         publicationDate: req.body.publicationDate || videos[indexOfVideo].publicationDate,
-        title: req.body.title || videos[indexOfVideo].title,
-        author: req.body.author || videos[indexOfVideo].author,
+        title: req.body.title,
+        author: req.body.author,
         availableResolutions,
     };
     videos[indexOfVideo] = updateVideo;
@@ -110,7 +110,7 @@ exports.app.post('/videos', (req, res) => {
     const errors = {
         errorsMessages: [],
     };
-    let { title, author, availableResolutions } = req.body;
+    let { title, author, availableResolutions, canBeDownloaded, minAgeRestriction } = req.body;
     if (!title || typeof title !== 'string' || !title.trim() || title.trim().length > 40) {
         errors.errorsMessages.push({ message: 'Incorrect title!', field: 'title' });
     }
@@ -137,7 +137,7 @@ exports.app.post('/videos', (req, res) => {
     const newVideo = {
         id: +(new Date()),
         canBeDownloaded: false,
-        minAgeRestriction: null,
+        minAgeRestriction: req.body.minAgeRestriction || null,
         createdAt: createdAt.toISOString(),
         publicationDate: publicationDate.toISOString(),
         title,

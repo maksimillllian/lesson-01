@@ -73,14 +73,17 @@ type RequestWithBody<Body> = Request<unknown, unknown, Body, unknown>;
 type CreateVideoType = {
     title: string;
     author: string;
-    availableResolutions: typeof availableResolution;
+    availableResolutions?: typeof availableResolution;
+    canBeDownloaded?: boolean;
+    minAgeRestriction?: number | null;
+    publicationDate?: string;
 };
 type UpdateVideoType = {
-    title?: string;
-    author?: string;
-    availableResolutions?: string[];
+    title: string;
+    author: string;
+    availableResolutions?: typeof availableResolution;
     canBeDownloaded?: boolean;
-    minAgeRestriction?: number;
+    minAgeRestriction?: number | null;
     publicationDate?: string;
 };
 type ErrorMessageType = {
@@ -139,24 +142,24 @@ app.put('/videos/:id',(req: RequestWithParams<Param> & RequestWithBody<UpdateVid
         return;
     }
     const updateVideo: VideoType = {
-        id : videos[indexOfVideo].id,
+        id,
         canBeDownloaded: req.body.canBeDownloaded || false,
         minAgeRestriction: req.body.minAgeRestriction || videos[indexOfVideo].minAgeRestriction,
         createdAt: videos[indexOfVideo].createdAt,
         publicationDate: req.body.publicationDate || videos[indexOfVideo].publicationDate,
-        title: req.body.title || videos[indexOfVideo].title,
-        author: req.body.author || videos[indexOfVideo].author,
+        title: req.body.title,
+        author: req.body.author,
         availableResolutions,
     }
     videos[indexOfVideo] = updateVideo;
 
     res.status(200).send(updateVideo);
 })
-app.post('/videos', (req: RequestWithBody<any>, res: Response) => {
+app.post('/videos', (req: RequestWithBody<CreateVideoType>, res: Response) => {
     const errors: ErrorType = {
         errorsMessages: [],
     };
-    let { title, author, availableResolutions } = req.body;
+    let { title, author, availableResolutions, canBeDownloaded, minAgeRestriction} = req.body;
     if (!title || typeof title !== 'string' || !title.trim() || title.trim().length > 40) {
         errors.errorsMessages.push({ message: 'Incorrect title!', field: 'title' });
     }
@@ -185,7 +188,7 @@ app.post('/videos', (req: RequestWithBody<any>, res: Response) => {
     const newVideo: VideoType = {
         id: +(new Date()),
         canBeDownloaded: false,
-        minAgeRestriction: null,
+        minAgeRestriction: req.body.minAgeRestriction || null,
         createdAt: createdAt.toISOString(),
         publicationDate: publicationDate.toISOString(),
         title,
